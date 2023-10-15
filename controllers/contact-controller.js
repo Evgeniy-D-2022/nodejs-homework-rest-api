@@ -1,21 +1,18 @@
-import Joi from "joi";
 import contactsService from "../models/index.js";
 import {HttpError} from "../helpers/index.js";
 import {ctrlWrapper} from "../decorators/index.js";
 
 
   const getAll = async(req, res) => {
-   
       const result = await contactsService.listContacts();
       res.json(result);
   }
 
   const getById = async (req, res) => {
-    
       const {id} = req.params;
       const result = await contactsService.getContactById(id);
       if(!result) {
-        throw HttpError(404, `Contact with id:'${id}' not found`)
+        throw HttpError(404, 'Not found')
       }
       res.json(result);
   }
@@ -26,7 +23,6 @@ import {ctrlWrapper} from "../decorators/index.js";
   }
 
   const updateById = async (req, res) => {
-  
       const {id} = req.params;
       const result = await contactsService.updateContactById(id, req.body);
       if(!result) {
@@ -36,7 +32,6 @@ import {ctrlWrapper} from "../decorators/index.js";
   }
 
   const deleteById = async (req, res) => {
-   
       const {id} = req.params;
       const result = await contactsService.removeContact(id);
       if(!result) {
