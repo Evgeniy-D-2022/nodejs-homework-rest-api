@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-import handleMongooseError from '../helpers/handleMongooseError.js';
-import runValidatorsAtUpdate from '../helpers/runValidatorsAtUpdate .js';
+import {handleMongooseError} from '../helpers/index.js';
+import {runValidatorsAtUpdate} from '../helpers/index.js';
 
 const contactsSchema = new Schema({
         name: {
@@ -19,7 +19,7 @@ const contactsSchema = new Schema({
           type: Boolean,
           default: false,
         },
-      }, {versionKey:false, timestamps: true}
+      }, {versionKey: false, timestamps: true}
 )
 
 contactsSchema.post('save', handleMongooseError);
