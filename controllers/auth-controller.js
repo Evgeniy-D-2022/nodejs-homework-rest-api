@@ -1,18 +1,16 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
 import {HttpError} from "../helpers/index.js";
 import {ctrlWrapper} from "../decorators/index.js";
-import { token } from "morgan";
 
 const {JWT_SECRET} = process.env;
 
-const signup = async(req, res) => {
-    const {email, password}= req.body;
+const register = async(req, res) => {
+    const { email, password } = req.body;
     const user = await User.findOne({email});
         if(user) {
-        throw HttpError(409, `${email} Email in use`)
+        throw HttpError(409, 'Email in use')
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -24,7 +22,7 @@ const signup = async(req, res) => {
     })
 }
 
-const signin = async(req, res) => {
+const login = async(req, res) => {
     const {email, password}= req.body;
     const user = await User.findOne({email});
         if(!user) {
@@ -45,30 +43,33 @@ const signin = async(req, res) => {
 
     res.json({
         token,
+        user: {
+            email: user.email,
+            subscription: user.subscription,
+        }
     })
  }
 
  const getCurrent = async(req, res) => {
-    const {username, email} = req.user;
+    const { email, subscription } = req.user;
+    console.log(req.body);
 
     res.json({
-        username,
         email,
+        subscription,
     })
  }
 
- const signout = async(req, res) => { 
+ const logout = async(req, res) => { 
     const {_id} = req.user;
     await User.findByIdAndUpdate(_id, {token: ''})
 
-    res.json({
-       message: "Signout success"
-    })
+    res.status(204).json()
  }
 
 export default {
-    signup: ctrlWrapper(signup),
-    signin: ctrlWrapper(signin),
+    register: ctrlWrapper(register),
+    login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
-    signout: ctrlWrapper(signout),
+    logout: ctrlWrapper(logout),
 }

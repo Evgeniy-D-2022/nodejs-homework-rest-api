@@ -1,4 +1,4 @@
-import { Model, Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import Joi from "joi";
 import handleMongooseError from '../helpers/handleMongooseError.js';
 import runValidatorsAtUpdate from '../helpers/runValidatorsAtUpdate.js';
@@ -6,10 +6,6 @@ import runValidatorsAtUpdate from '../helpers/runValidatorsAtUpdate.js';
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema({
-        username: {
-          type: String,
-          required: true,
-        },
         password: {
           type: String,
           minlength: 6,
@@ -36,13 +32,13 @@ userSchema.post('save', handleMongooseError);
 userSchema.pre('findOneAndUpdate', runValidatorsAtUpdate);
 userSchema.post('findOneAndUpdate', handleMongooseError);
 
-export const userSignupSchema = Joi.object({
+export const registerSchema = Joi.object({
     username: Joi.string().required(),
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
 })
 
-export const userSigninSchema = Joi.object({
+export const loginSchema = Joi.object({
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
 })

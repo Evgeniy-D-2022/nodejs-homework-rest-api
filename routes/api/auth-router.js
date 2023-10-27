@@ -2,16 +2,16 @@ import express from "express";
 import authController from "../../controllers/auth-controller.js";
 import {authenticate, isEmptyBody} from '../../middlewares/index.js';
 import {validateBody} from '../../decorators/index.js';
-import { userSigninSchema, userSignupSchema } from "../../models/user.js";
+import { loginSchema, registerSchema } from "../../models/user.js";
 
-const userSignupValidate = validateBody(userSignupSchema);
-const userSigninValidate = validateBody(userSigninSchema);
+const registerValidate = validateBody(registerSchema);
+const loginValidate = validateBody(loginSchema);
 
 const authRouter = express.Router();
 
-authRouter.post("/signup", isEmptyBody, userSignupValidate, authController.signup);
-authRouter.post("/signin", isEmptyBody, userSigninValidate, authController.signin);
+authRouter.post("/register", isEmptyBody, registerValidate, authController.register);
+authRouter.post("/login", isEmptyBody, loginValidate, authController.login);
 authRouter.get("/current", authenticate, authController.getCurrent);
-authRouter.post("/signout", authenticate, authController.signout);
+authRouter.post("/logout", authenticate, authController.logout);
 
 export default authRouter;
