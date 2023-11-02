@@ -40,7 +40,7 @@ export const contactAddSchema = Joi.object({
       phone: Joi.string().required().messages({
         "any.required": `missing required "phone" field`
     }),
-    favorite: Joi.boolean(), 
+      favorite: Joi.boolean(), 
   });
 
 export const contactUpdateFavoriteSchema = Joi.object({
